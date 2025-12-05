@@ -14,7 +14,7 @@ def step1_gendata():
     })
 
     # Partition by date and country for easy filtering later
-    df["event_date"] = df["event_date"].dt.date
+    df["event_date"] = df["event_date"].dt.floor("D")  # type: ignore[attr-defined]
     df.to_parquet(
         "data/events",
         partition_cols=["event_date", "country"],
@@ -86,7 +86,7 @@ def pandas_on_arrow():
 
 
 if __name__ == "__main__":
-    # step1_gendata()
-    # step2_scan_data()
-    # stream_chunks_pipeline()
+    step1_gendata()
+    step2_scan_data()
+    stream_chunks_pipeline()
     pandas_on_arrow()

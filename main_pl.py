@@ -44,7 +44,8 @@ def step2_scan_data():
     table = scanner.to_table()
 
     # Convert PyArrow table to Polars
-    df = pl.from_arrow(table)
+    df = pl.from_arrow(table)  # type: ignore[assignment]
+    assert isinstance(df, pl.DataFrame)
     df = df.select(["event_id", "user_id", "value"])
     print(df)
 
@@ -61,7 +62,8 @@ def stream_chunks_pipeline():
 
     for i, batch in enumerate(scanner.to_batches()):
         # Convert PyArrow batch to Polars
-        batch_df = pl.from_arrow(batch)
+        batch_df = pl.from_arrow(batch)  # type: ignore[assignment]
+        assert isinstance(batch_df, pl.DataFrame)
         
         # process one chunk at a time
         agg = (
@@ -84,7 +86,8 @@ def polars_on_arrow():
     )
 
     # Convert PyArrow table to Polars
-    df = pl.from_arrow(table)
+    df = pl.from_arrow(table)  # type: ignore[assignment]
+    assert isinstance(df, pl.DataFrame)
     
     # Convert all columns to string type
     df = df.with_columns([
@@ -98,6 +101,6 @@ def polars_on_arrow():
 
 if __name__ == "__main__":
     # step1_gendata()
-    step2_scan_data()
-    stream_chunks_pipeline()
+    # step2_scan_data()
+    # stream_chunks_pipeline()
     polars_on_arrow()
